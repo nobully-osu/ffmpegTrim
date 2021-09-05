@@ -2,6 +2,7 @@
 # Video Trimming Script
 # Written by nobully
 # http://osu.ppy.sh/users/nobully
+# https://github.com/randomman254/PythonScripts/
 
 import os
 
