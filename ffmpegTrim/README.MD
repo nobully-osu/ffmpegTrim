@@ -5,4 +5,4 @@ It is recommended to have the scripts in their own folder for this.
 
 You can drag and drop the video file onto the window of the script to drop the filepath in easily.
 
-Timecode format for start and end times are ```(hh:mm:ss)```
+Timecode format for start and end times are ```hh:mm:ss```
