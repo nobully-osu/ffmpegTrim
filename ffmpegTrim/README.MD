@@ -1,4 +1,4 @@
-Python 3 is required for this. Get it [here](https://www.python.org/)
+Python 3 is **required** for this. Get it [here](https://www.python.org/).
 
 If you are missing ffmpeg, it will automatically be downloaded for you and copied next to the script file so that you don't have to.
 It is recommended to have the scripts in their own folder for this.
