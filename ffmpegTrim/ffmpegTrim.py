@@ -8,7 +8,7 @@ import os
 import subprocess
 
 #check for ffmpeg and download if needed
-if not os.path.exists("ffmpeg.exe"):
+if not os.path.exists("ffmpeg\\bin\\ffmpeg.exe"):
     subprocess.call("ffmpegDownload.py", shell=True)
 
 #read in file location with user input
@@ -23,7 +23,7 @@ endtime=input("End time of the clip (hh:mm:ss): ")
 #strip original file extension, add _Trim.mp4 to denote the output file, and restore file extension
 outputfile=file_path.rsplit( ".", 1 )[ 0 ]+"_Trim.mp4"
 
-#passthru string to hard code ffmpeg command
+#passthru string to hard coded ffmpeg command
 ffmpegString="ffmpeg -i "+file_path+" -ss "+starttime+" -to "+endtime+" -c:v copy -c:a copy "+outputfile
 
 #run ffmpeg with specified parameters
