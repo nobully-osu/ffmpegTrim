@@ -14,10 +14,11 @@ subprocess.check_call([sys.executable, '-m', 'pip', 'install',
 from pyunpack import Archive
 import wget
 
-print("\nDownloading ffmpeg...\n")
+print("\nDownloading ffmpeg...")
 wget.download(ffmpegURL)
 
 #actually extract the file
+print("\nExtracting...")
 Archive("ffmpeg-5.0-essentials_build.7z").extractall(".")
 
 #rename the ffmpeg folder for easier code writing
@@ -30,4 +31,4 @@ shutil.copyfile("ffmpeg/bin/ffmpeg.exe", "ffmpeg.exe")
 os.remove("ffmpeg-5.0-essentials_build.7z")
 
 #declare download script is finished for user experience
-print("\n\nDone!\n")
+print("Done!\n")
