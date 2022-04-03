@@ -11,6 +11,9 @@ import subprocess
 if not os.path.exists("ffmpeg\\bin\\ffmpeg.exe"):
     subprocess.call("ffmpegDownload.py", shell=True)
 
+#announce version
+print("ffmpegTrim v1.2.1")
+
 #read in file location with user input
 filePath = input("Location of video to trim (or drag and drop target video on window): ")
 
@@ -27,7 +30,7 @@ endTime = input("End time of the clip (hh:mm:ss): ")
 outputFile, fileExtension = filePath.rsplit( ".", 1 )
 
 #passthru string to (slightly less) hard coded ffmpeg command
-ffmpegString = "ffmpeg -i " + filePath + " -ss " + startTime + " -to " + endTime + " -c:v copy -c:a copy " + outputFile + "_Trim." + fileExtension
+ffmpegTrim = "ffmpeg -i " + filePath + " -ss " + startTime + " -to " + endTime + " -c:v copy -c:a copy " + outputFile + "_Trim." + fileExtension
 
 #run ffmpeg with specified parameters
-os.system(ffmpegString)
+os.system(ffmpegTrim)
