@@ -1,36 +1,51 @@
-# ffmpegTrim.py
-# Video Trimming Script
-# Written by nobully
-# http://osu.ppy.sh/users/nobully
-# https://github.com/randomman254/PythonScripts/
-
 import os
-import subprocess
+import ffmpegSetup
 
-#check for ffmpeg and download if needed
-if not os.path.exists("ffmpeg\\bin\\ffmpeg.exe"):
-    subprocess.call("ffmpegDownload.py", shell=True)
+# init json configuration file for if first run
+if not os.path.exists("config.ini"):
+    print("Running first time setup...\n")
+    ffmpegSetup.setup()
 
-#announce version
-print("ffmpegTrim v1.2.1")
+import ffmpeg
+from configparser import ConfigParser
+config = ConfigParser()
 
-#read in file location with user input
-filePath = input("Location of video to trim (or drag and drop target video on window): ")
+# read in config
+config.read("config.ini")
 
-#grab start time of clip
-startTime = input("Start time of the clip (hh:mm:ss): ")
+# config variables
+audioCodec = config.get("main", "audio")
+videoCodec = config.get("main", "video")
+fileExtension = config.get("main", "extension")
 
-#grab end time of clip
-endTime = input("End time of the clip (hh:mm:ss): ")
+# get user input
+print("ffmpegTrim v3.0.0")
 
-#strip original file extension, add _Trim.mp4 to denote the output file, and restore file extension (old way)
-#outputFile = filePath.rsplit( ".", 1 )[ 0 ] + "_Trim.mp4"
+inputPath = input("Path to video (or drag and drop): ")
+inputPath = inputPath.strip('\"\'')
+startTime = input("Start time of clip (mm:ss): ")
+endTime = input("End time of clip (mm:ss): ")
 
-#store file extension in a neater way to account for other file extensions
-outputFile, fileExtension = filePath.rsplit( ".", 1 )
+# split file extension and append to filename to indicate trimmed video, also change extension to reflect configuration file
+tempPath, tempFileExtension = inputPath.rsplit( ".", 1 )
+outputPath = tempPath + "_Trim." + fileExtension
 
-#passthru string to (slightly less) hard coded ffmpeg command
-ffmpegTrim = "ffmpeg -i " + filePath + " -ss " + startTime + " -to " + endTime + " -c:v copy -c:a copy " + outputFile + "_Trim." + fileExtension
+# check for existing clips and increment filename
+# this is technically the slow way but not many people will be creating millions of clips from a single 10-15 min replay buffer so idc
+if os.path.exists(outputPath):
+    i = 1
+    while os.path.exists(outputPath):
+        tempPath, tempFileExtension = inputPath.rsplit( ".", 1 )
+        outputPath = tempPath + "_Trim%s." % i + fileExtension
+        i += 1
+else: pass
 
-#run ffmpeg with specified parameters
-os.system(ffmpegTrim)
+# run ffmpeg via wrapper library (new method)
+# stream copy will not work with .trim() as reencoding is required or something idk
+# for whatever fuckass reason i have to specify aac for audio stream now even though copy worked in the past
+(
+    ffmpeg
+    .input(inputPath)
+    .output(outputPath, ss=startTime, to=endTime, acodec=audioCodec, vcodec=videoCodec)
+    .run()
+)
